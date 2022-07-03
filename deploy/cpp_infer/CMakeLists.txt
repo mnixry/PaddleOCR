@@ -13,6 +13,8 @@ SET(CUDNN_LIB "" CACHE PATH "Location of libraries")
 SET(TENSORRT_DIR "" CACHE PATH "Compile demo with TensorRT")
 
 set(DEMO_NAME "ppocr")
+option(BUILD_SHARED "Compile shared library instead of demo exe" OFF)
+option(BUILD_STATIC "Compile static library instead of demo exe" OFF)
 
 
 macro(safe_set_static_flag)
@@ -216,16 +218,29 @@ include(external-cmake/auto-log.cmake)
 include_directories(${FETCHCONTENT_BASE_DIR}/extern_autolog-src)
 
 AUX_SOURCE_DIRECTORY(./src SRCS)
-add_executable(${DEMO_NAME} ${SRCS})
-target_link_libraries(${DEMO_NAME} ${DEPS})
 
-if (WIN32 AND WITH_MKL)
-    add_custom_command(TARGET ${DEMO_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/mklml.dll ./mklml.dll
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/libiomp5md.dll ./libiomp5md.dll
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mkldnn/lib/mkldnn.dll ./mkldnn.dll
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/mklml.dll ./release/mklml.dll
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/libiomp5md.dll ./release/libiomp5md.dll
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mkldnn/lib/mkldnn.dll ./release/mkldnn.dll
-    )
-endif()
+if (BUILD_SHARED)
+    message("compile shared library")
+    add_library(${DEMO_NAME} SHARED ${SRCS})
+    add_definitions(-DOCR_EXPORTS)
+  elseif (BUILD_STATIC)
+    message("compile static library")
+    add_library(${DEMO_NAME} STATIC ${SRCS})
+    add_definitions(-DOCR_EXPORTS)
+  else()
+    message("compile demo exe")
+    add_executable(${DEMO_NAME} ${SRCS})
+  
+  endif()
+  target_link_libraries(${DEMO_NAME} ${DEPS})
+  
+  if (WIN32 AND WITH_MKL)
+      add_custom_command(TARGET ${DEMO_NAME} POST_BUILD
+          COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/mklml.dll ./mklml.dll
+          COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/libiomp5md.dll ./libiomp5md.dll
+          COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mkldnn/lib/mkldnn.dll ./mkldnn.dll
+          COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/mklml.dll ./release/mklml.dll
+          COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/libiomp5md.dll ./release/libiomp5md.dll
+          COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mkldnn/lib/mkldnn.dll ./release/mkldnn.dll
+      )
+  endif()
