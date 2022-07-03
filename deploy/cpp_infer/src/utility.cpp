@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <dirent.h>
 #include <include/utility.h>
 #include <iostream>
 #include <ostream>
-
 #include <vector>
+#include <filesystem>
 
 #ifdef _WIN32
-#include <direct.h>
 #else
 #include <sys/stat.h>
 #endif
@@ -65,38 +63,38 @@ void Utility::VisualizeBboxes(const cv::Mat &srcimg,
             << std::endl;
 }
 
-// list all files under a directory
-void Utility::GetAllFiles(const char *dir_name,
-                          std::vector<std::string> &all_inputs) {
-  if (NULL == dir_name) {
-    std::cout << " dir_name is null ! " << std::endl;
-    return;
-  }
-  struct stat s;
-  stat(dir_name, &s);
-  if (!S_ISDIR(s.st_mode)) {
-    std::cout << "dir_name is not a valid directory !" << std::endl;
-    all_inputs.push_back(dir_name);
-    return;
-  } else {
-    struct dirent *filename; // return value for readdir()
-    DIR *dir;                // return value for opendir()
-    dir = opendir(dir_name);
-    if (NULL == dir) {
-      std::cout << "Can not open dir " << dir_name << std::endl;
-      return;
-    }
-    std::cout << "Successfully opened the dir !" << std::endl;
-    while ((filename = readdir(dir)) != NULL) {
-      if (strcmp(filename->d_name, ".") == 0 ||
-          strcmp(filename->d_name, "..") == 0)
-        continue;
-      // img_dir + std::string("/") + all_inputs[0];
-      all_inputs.push_back(dir_name + std::string("/") +
-                           std::string(filename->d_name));
-    }
-  }
-}
+//// list all files under a directory
+//void Utility::GetAllFiles(const char *dir_name,
+//                          std::vector<std::string> &all_inputs) {
+//  if (NULL == dir_name) {
+//    std::cout << " dir_name is null ! " << std::endl;
+//    return;
+//  }
+//  struct stat s;
+//  stat(dir_name, &s);
+//  if (!S_ISDIR(s.st_mode)) {
+//    std::cout << "dir_name is not a valid directory !" << std::endl;
+//    all_inputs.push_back(dir_name);
+//    return;
+//  } else {
+//    struct dirent *filename; // return value for readdir()
+//    DIR *dir;                // return value for opendir()
+//    dir = opendir(dir_name);
+//    if (NULL == dir) {
+//      std::cout << "Can not open dir " << dir_name << std::endl;
+//      return;
+//    }
+//    std::cout << "Successfully opened the dir !" << std::endl;
+//    while ((filename = readdir(dir)) != NULL) {
+//      if (strcmp(filename->d_name, ".") == 0 ||
+//          strcmp(filename->d_name, "..") == 0)
+//        continue;
+//      // img_dir + std::string("/") + all_inputs[0];
+//      all_inputs.push_back(dir_name + std::string("/") +
+//                           std::string(filename->d_name));
+//    }
+//  }
+//}
 
 cv::Mat Utility::GetRotateCropImage(const cv::Mat &srcimage,
                                     std::vector<std::vector<int>> box) {
@@ -208,14 +206,6 @@ bool Utility::PathExists(const std::string &path) {
 #else
   struct stat buffer;
   return (stat(path.c_str(), &buffer) == 0);
-#endif // !_WIN32
-}
-
-void Utility::CreateDir(const std::string &path) {
-#ifdef _WIN32
-  _mkdir(path.c_str());
-#else
-  mkdir(path.c_str(), 0777);
 #endif // !_WIN32
 }
 

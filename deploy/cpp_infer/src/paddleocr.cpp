@@ -137,9 +137,9 @@ PPOCR::ocr(std::vector<cv::String> cv_all_img_names, bool det, bool rec,
       ocr_results.push_back(ocr_result_tmp);
     }
   } else {
-    if (!Utility::PathExists(FLAGS_output) && FLAGS_det) {
-      Utility::CreateDir(FLAGS_output);
-    }
+    //if (!Utility::PathExists(FLAGS_output) && FLAGS_det) {
+    //  Utility::CreateDir(FLAGS_output);
+    //}
 
     for (int i = 0; i < cv_all_img_names.size(); ++i) {
       std::vector<OCRPredictResult> ocr_result;
