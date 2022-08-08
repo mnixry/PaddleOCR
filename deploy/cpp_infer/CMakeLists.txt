@@ -16,7 +16,6 @@ set(DEMO_NAME "ppocr")
 option(BUILD_SHARED "Compile shared library instead of demo exe" OFF)
 option(BUILD_STATIC "Compile static library instead of demo exe" OFF)
 
-
 macro(safe_set_static_flag)
     foreach(flag_var
         CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
@@ -46,7 +45,7 @@ if (WIN32)
   find_package(OpenCV REQUIRED PATHS ${OPENCV_DIR}/build/ NO_DEFAULT_PATH)
 
 else ()
-  find_package(OpenCV REQUIRED PATHS ${OPENCV_DIR}/share/OpenCV NO_DEFAULT_PATH)
+  find_package(OpenCV REQUIRED PATHS ${OPENCV_DIR} NO_DEFAULT_PATH)
   include_directories("${PADDLE_LIB}/paddle/include")
   link_directories("${PADDLE_LIB}/paddle/lib")
 endif ()
@@ -73,7 +72,7 @@ else()
     if(WITH_MKL)
         set(FLAG_OPENMP "-fopenmp")
     endif()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -o3 ${FLAG_OPENMP} -std=c++11")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -g -O3 ${FLAG_OPENMP} -std=c++14")
     set(CMAKE_STATIC_LIBRARY_PREFIX "")
     message("cmake cxx flags" ${CMAKE_CXX_FLAGS})
 endif()
