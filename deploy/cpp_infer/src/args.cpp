@@ -23,7 +23,7 @@ DEFINE_int32(gpu_mem, 4000, "GPU id when infering with GPU.");
 DEFINE_int32(cpu_threads, std::thread::hardware_concurrency(), "Num of threads with CPU.");
 DEFINE_bool(enable_mkldnn, true, "Whether use mkldnn with CPU.");
 DEFINE_string(precision, "fp32", "Precision be one of fp32/fp16/int8");
-DEFINE_bool(benchmark, false, "Whether use benchmark.");
+//DEFINE_bool(benchmark, false, "Whether use benchmark.");
 DEFINE_string(output, "./output/", "Save benchmark log path.");
 DEFINE_string(image_dir, "", "Dir of input image.");
 DEFINE_string(
