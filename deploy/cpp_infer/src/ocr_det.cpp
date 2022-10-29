@@ -92,7 +92,7 @@ void DBDetector::LoadModel(const std::string &model_dir) {
   this->predictor_ = CreatePredictor(config);
 }
 
-void DBDetector::Run(cv::Mat &img,
+void DBDetector::Run(const cv::Mat &img,
                      std::vector<std::vector<std::vector<int>>> &boxes,
                      std::vector<double> &times) {
   float ratio_h{};
@@ -103,7 +103,7 @@ void DBDetector::Run(cv::Mat &img,
   img.copyTo(srcimg);
 
   auto preprocess_start = std::chrono::steady_clock::now();
-  this->resize_op_.Run(img, resize_img, this->max_side_len_, ratio_h, ratio_w,
+  this->resize_op_.Run(srcimg, resize_img, this->max_side_len_, ratio_h, ratio_w,
                        this->use_tensorrt_);
 
   this->normalize_op_.Run(&resize_img, this->mean_, this->scale_,

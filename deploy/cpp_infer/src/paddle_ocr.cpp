@@ -87,7 +87,7 @@ void PaddleOcrDestroy(paddle_ocr_t* ocr_ptr)
 }
 
 OCR_ERROR _PaddleOcrDet(
-    paddle_ocr_t* ocr_ptr, cv::Mat& srcimg,
+    paddle_ocr_t* ocr_ptr, const cv::Mat& srcimg,
     int* out_boxes, size_t* out_boxes_size,
     double* out_times, size_t* out_times_size)
 {
@@ -155,7 +155,7 @@ OCR_ERROR PaddleOcrDetWithData(
 }
 
 OCR_ERROR _PaddleOcrRec(
-    paddle_ocr_t* ocr_ptr, cv::Mat& srcimg,
+    paddle_ocr_t* ocr_ptr, const cv::Mat& srcimg,
     char** out_strs, float* out_scores, size_t* out_size,
     double* out_times, size_t* out_times_size)
 {
@@ -219,7 +219,7 @@ OCR_ERROR PaddleOcrRecWithData(
 }
 
 OCR_ERROR _PaddleOcrSystem(
-    paddle_ocr_t* ocr_ptr, cv::Mat& srcimg,
+    paddle_ocr_t* ocr_ptr, const cv::Mat& srcimg,
     bool with_cls,
     int* out_boxes, char** out_strs, float* out_scores, size_t* out_size,
     double* out_times, size_t* out_times_size)

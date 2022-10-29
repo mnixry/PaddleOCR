@@ -16,7 +16,7 @@
 
 namespace PaddleOCR {
 
-void CRNNRecognizer::Run(std::vector<cv::Mat> img_list,
+void CRNNRecognizer::Run(const std::vector<cv::Mat>& img_list,
                          std::vector<std::string> &rec_texts,
                          std::vector<float> &rec_text_scores,
                          std::vector<double> &times) {

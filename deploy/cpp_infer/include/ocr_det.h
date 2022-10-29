@@ -72,7 +72,7 @@ public:
   void LoadModel(const std::string &model_dir);
 
   // Run predictor
-  void Run(cv::Mat &img, std::vector<std::vector<std::vector<int>>> &boxes,
+  void Run(const cv::Mat &img, std::vector<std::vector<std::vector<int>>> &boxes,
            std::vector<double> &times);
 
 private:
