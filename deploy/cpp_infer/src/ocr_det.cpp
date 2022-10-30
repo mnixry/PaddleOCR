@@ -87,7 +87,7 @@ void DBDetector::LoadModel(const std::string &model_dir) {
   config.SwitchIrOptim(true);
 
   config.EnableMemoryOptim();
-  // config.DisableGlogInfo();
+  config.DisableGlogInfo();
 
   this->predictor_ = CreatePredictor(config);
 }
