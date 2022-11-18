@@ -15,15 +15,11 @@ jobs:
           repository: opencv/opencv
           ref: 4.5.3
 
-      - name: Cache build
-        uses: actions/cache@v3
-        with:
-          path: ./build
-          key: ${{ runner.os }}-opencv-build
+      - uses: Chocobo1/setup-ccache-action@v1
 
       - name: CMake Build
         run: |
-          mkdir -p build
+          mkdir build
           cd build
           
           cmake .. \
@@ -44,7 +40,7 @@ jobs:
             -DWITH_TIFF=ON \
             -DBUILD_TIFF=ON
           
-          make -j2
+          make -j4
           make install
 
       - uses: actions/upload-artifact@v3
@@ -64,9 +60,7 @@ jobs:
           - openblas
 
     env:
-      INFERENCE_URL: >-
-        https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux
-        /CPU/gcc8.2_${{ matrix.infer }}/paddle_inference.tgz
+      INFERENCE_PATH: Linux/CPU/gcc8.2_${{ matrix.infer }}/paddle_inference.tgz
       WITH_MKL: ${{ contains(matrix.infer, 'mkl') && 'ON' || 'OFF' }}
 
     runs-on: ubuntu-latest
@@ -81,7 +75,7 @@ jobs:
 
       - name: Download inference library
         run: |
-          curl -L $INFERENCE_URL | tar -zxv
+          curl -L "https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/$INFERENCE_PATH" | tar -zxv
 
       - name: CMake Build
         working-directory: ./deploy/cpp_infer/
@@ -93,13 +87,13 @@ jobs:
             -DPADDLE_LIB=$(realpath ../../../paddle_inference) \
             -DOpenCV_DIR=$(realpath ../../../opencv/lib64/cmake/opencv4) \
             -DOpenCV_STATIC=ON \
-            -DWITH_STATIC_LIB=OFF \
-            -DBUILD_SHARED=ON \
+            -DWITH_STATIC_LIB=ON \
+            -DBUILD_STATIC=ON \
             -DWITH_MKL=$WITH_MKL
           
-          make -j2
+          make -j4
 
       - uses: actions/upload-artifact@v3
         with:
           name: paddle-ocr_${{ matrix.infer }}
-          path: ./deploy/cpp_infer/build/*.so
+          path: ./deploy/cpp_infer/build/
