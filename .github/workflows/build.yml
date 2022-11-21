@@ -79,11 +79,13 @@ jobs:
 
       - name: CMake Build
         working-directory: ./deploy/cpp_infer/
+        env:
+          VERBOSE: 1
         run: |
           mkdir build
           cd build
           
-          cmake .. \
+          sudo cmake .. \
             -DPADDLE_LIB=$(realpath ../../../paddle_inference) \
             -DOpenCV_DIR=$(realpath ../../../opencv/lib64/cmake/opencv4) \
             -DOpenCV_STATIC=ON \
