@@ -40,8 +40,7 @@ jobs:
             -DWITH_TIFF=ON \
             -DBUILD_TIFF=ON
           
-          make -j4
-          make install
+          cmake --build . --target install --parallel 4
 
       - uses: actions/upload-artifact@v3
         with:
@@ -93,7 +92,7 @@ jobs:
             -DBUILD_STATIC=ON \
             -DWITH_MKL=$WITH_MKL
           
-          make -j4
+          sudo cmake --build . --target install --parallel 4
 
       - uses: actions/upload-artifact@v3
         with:
