@@ -92,7 +92,8 @@ jobs:
             -DBUILD_STATIC=ON \
             -DWITH_MKL=$WITH_MKL
           
-          sudo cmake --build . --target install --parallel 4
+          sudo cmake --build . --parallel 4
+          sudo chown -R $(whoami) .
 
       - uses: actions/upload-artifact@v3
         with:
