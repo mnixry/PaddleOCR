@@ -88,6 +88,7 @@ jobs:
             -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DPADDLE_LIB=$(realpath ../../../paddle_inference) \
             -DOpenCV_DIR=$(realpath ../../../opencv/lib64/cmake/opencv4) \
+            -DCMAKE_CXX_FLAGS="-static" \
             -DOpenCV_STATIC=ON \
             -DWITH_STATIC_LIB=ON \
             -DBUILD_STATIC=ON \
